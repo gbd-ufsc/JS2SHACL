@@ -1,0 +1,40 @@
+@prefix sh: <http://www.w3.org/ns/shacl#> .
+@prefix ex: <http://example.org/#> .
+@prefix xsd: <http://www.w3.org/2001/XMLSchema#> .
+
+ex:addressShape a sh:NodeShape;
+  sh:targetClass ex:address;
+  sh:property [
+    sh:path ex:street;
+    sh:datatype xsd:string;
+    sh:minCount 1;
+  ];
+  sh:property [
+    sh:path ex:number;
+    sh:datatype xsd:integer;
+    sh:minCount 1;
+  ];
+  sh:property [
+    sh:path ex:city;
+    sh:datatype xsd:string;
+    sh:minCount 1;
+  ].
+
+ex:JS_id_Shape a sh:NodeShape;
+  sh:targetClass ex:JS_id;
+  sh:and (
+    [
+      sh:property [
+        sh:path ex:name;
+        sh:datatype xsd:string;
+      ];
+    ]
+    [
+      sh:property [
+        sh:path ex:age;
+        sh:datatype xsd:integer;
+      ];
+    ]
+    ex:address_shape
+  ).
+
