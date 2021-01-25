@@ -716,7 +716,7 @@ module.exports = {
             elementsCount['node']++
 
             scope = 1
-            var node = `ex:${name}Shape a sh:NodeShape;\n` + addSpaces() + `sh:targetClass ex:${name}`
+            var node = `ex:${name}_Shape a sh:NodeShape;\n` + addSpaces() + `sh:targetClass ex:${name}`
 
             nodesReady[name] = node + create_New_Complex_NodeShape_Structure(element,name)
         }
