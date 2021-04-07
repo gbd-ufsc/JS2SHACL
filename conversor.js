@@ -59,9 +59,7 @@ module.exports = {
         
         function getPropertyElements(element){
             if(element != null){
-                if(element.properties){
-                    return element.properties
-                }
+                return element.properties
             } else {
                 return undefined
             }
@@ -82,11 +80,10 @@ module.exports = {
                     if(item in JS4GeoDataTypes){
                         create_New_JS4Geo_NodeShape(element,item)
                     } else if (item in extendedDataTypes){
-                        elementsCount['elements'] += 1
-
-                        elementsCount['property'] += 1
+                        addElementsCount('elements',1,item)
+                        addElementsCount('property',1,item)
                     } else {
-                        elementsCount['elements']++
+                        addElementsCount('elements',1,item)
                         create_New_Complex_NodeShape(defSectionElements[item],item)
                     }
                     mappedDatatypes.push(item)
@@ -112,7 +109,8 @@ module.exports = {
         function setMainNodeShape(element){
             addPrefixes['ex'] = true
             addPrefixes['sh'] = true
-            elementsCount['node']++
+
+            addElementsCount('node',1,element)
 
             var local = 'ex:JS_id_Shape a sh:NodeShape;\n' + addSpaces() + 'sh:targetClass ex:JS_id'
             return local
@@ -121,10 +119,9 @@ module.exports = {
         function setGenericArrayProperty(element,name,required,last){
             var local = ''
 
-
-            elementsCount['elements'] += 1
-            elementsCount['property'] += 1
-            elementsCount['properties'] += 1
+            addElementsCount('elements',1,name)
+            addElementsCount('property',1,name)
+            addElementsCount('properties',1,name)
 
             if(name != null){
                 local += addSpaces() + `sh:property [\n` + addSpaces(1) + `sh:path ex:${name};\n` + addSpaces() + `sh:node dash:ListShape;\n` + addSpaces() + `sh:property [\n` + addSpaces(1) + `sh:path ([sh:zeroOrMorePath rdf:rest] rdf:first);\n` + addSpaces(-1) + '];\n'
@@ -157,13 +154,12 @@ module.exports = {
         function setListValidationArrayProperty(element,name,required,last,specialCase=false){
             var local = ''
 
-
-            elementsCount['elements'] += 1
-            elementsCount['property'] += 2
-            elementsCount['properties'] += 2
+            addElementsCount('elements',1,name)
+            addElementsCount('property',2,name)
+            addElementsCount('properties',2,name)
             
             if(specialCase){
-                local += addSpaces() + `sh:node dash:ListShape;\n` + addSpaces() + `sh:property [\n` + addSpaces(1) + `sh:path ([sh:zeroOrMorePath rdf:rest] rdf:first);\n`
+                local += addSpaces(1) + `sh:node dash:ListShape;\n` + addSpaces() + `sh:property [\n` + addSpaces(1) + `sh:path ([sh:zeroOrMorePath rdf:rest] rdf:first);\n`
             } else {
                 local += addSpaces() + `sh:property [\n` + addSpaces(1) + `sh:path ex:${name};\n` + addSpaces() + `sh:node dash:ListShape;\n` + addSpaces() + `sh:property [\n` + addSpaces(1) + `sh:path ([sh:zeroOrMorePath rdf:rest] rdf:first);\n`
             }
@@ -258,10 +254,9 @@ module.exports = {
             var local = ''
             var index = 0
 
-
-            elementsCount['elements'] += 1
-            elementsCount['property'] += 1
-            elementsCount['properties'] += 2
+            addElementsCount('elements',1,name)
+            addElementsCount('property',1,name)
+            addElementsCount('properties',2,name)
 
             if(name != null){
                 local += addSpaces() + `sh:property [\n` + addSpaces(1) + `sh:path ex:${name};\n` + addSpaces() + `sh:node dash:ListShape;\n`
@@ -277,9 +272,9 @@ module.exports = {
                 if(element_.type in dataTypes){
                     addPrefixes['xsd'] = true
 
-                    elementsCount['elements'] += 1
-                    elementsCount['property'] += 1
-                    elementsCount['properties'] += 1
+                    addElementsCount('elements',1,name)
+                    addElementsCount('property',1,name)
+                    addElementsCount('properties',1,name)
                     
                     local += addSpaces() + `sh:property [\n`
                     if(index == 0){
@@ -298,7 +293,7 @@ module.exports = {
                     local += addSpaces() + `sh:datatype xsd:${dataTypes[element_.type]};\n` + addSpaces(-1) + '];\n'
                 } else {
 
-                    elementsCount['elements'] += 1
+                    addElementsCount('elements',1,name)
 
                     local += addSpaces() + `sh:property [\n`
                     if(index == 0){
@@ -367,10 +362,9 @@ module.exports = {
 
             addPrefixes['xsd'] = true
 
-
-            elementsCount['elements'] += 1
-            elementsCount['property'] += 1
-            elementsCount['properties'] += 1
+            addElementsCount('elements',1,name)
+            addElementsCount('property',1,name)
+            addElementsCount('properties',1,name)
 
             // if(name != null){
                 local += addSpaces() + 'sh:property [\n'
@@ -436,12 +430,12 @@ module.exports = {
         function setComplexNodeShape(element,name,required,ref = null,last){
             var local = ''
 
-            elementsCount['elements'] += 1
+            addElementsCount('elements',1,name)
 
             checkUndefined(element)
             if(name != null){
 
-                elementsCount['properties'] += 1
+                addElementsCount('properties',1,name)
 
                 if(ref != null){
                     local += addSpaces() + `sh:property [\n` + addSpaces(1) + `sh:path ex:${name};\n` + addSpaces() + `sh:node ex:${ref}_Shape;\n`
@@ -497,9 +491,9 @@ module.exports = {
             
             if(name == 'const' || name == 'enum'){
 
-                elementsCount['elements'] += 1
-                elementsCount['property'] += 1
-                elementsCount['properties'] += 1
+                addElementsCount('elements',1,name)
+                addElementsCount('property',1,name)
+                addElementsCount('properties',1,name)
 
                 try{
                     var str = ''
@@ -538,10 +532,10 @@ module.exports = {
 
         function setOthersProperty(element,name,especialCase,path,last){
             var local = ''
-
-            elementsCount['elements'] += 1
-            elementsCount['property'] += 1
-            elementsCount['properties'] += 1
+            
+            addElementsCount('elements',1,name)
+            addElementsCount('property',1,name)
+            addElementsCount('properties',1,name)
 
             if(especialCase){
                 local += addSpaces() + 'sh:property [\n' + addSpaces(1) + `sh:path ex:${path};\n`
@@ -569,9 +563,9 @@ module.exports = {
     
                     }
 
-                    elementsCount['elements'] += 1
-                    // elementsCount['property'] += 1
-                    elementsCount['properties'] += 1
+                    addElementsCount('elements',1,name)
+                    // addElementsCount('property',1,name)
+                    addElementsCount('properties',1,name)
     
                     if(typeItem in JS4GeoDataTypes){
 
@@ -713,12 +707,14 @@ module.exports = {
         //#endregion
 
         function create_New_Complex_NodeShape(element,name){
-            elementsCount['node']++
+
+            addElementsCount('node',1,name)
 
             scope = 1
             var node = `ex:${name}_Shape a sh:NodeShape;\n` + addSpaces() + `sh:targetClass ex:${name}`
 
             nodesReady[name] = node + create_New_Complex_NodeShape_Structure(element,name)
+            scope = 1
         }
 
         function create_Complex_Property(element,name){
@@ -789,7 +785,7 @@ module.exports = {
                                 local += setOthersProperty(propertiesElements[item][i],i,false,item,checkLastElement(element,item))
                             }
                         }
-                        if(checkLastElement(propertiesElements,i)){
+                        if(checkLastElement(propertiesElements,item)){
                             local += addSpaces(-1) + `].\n`
                         }else{
                             local += addSpaces(-1) + '];\n'
@@ -821,15 +817,24 @@ module.exports = {
                     
                 } 
                 else {
+                    let anyType = false
                     for(var i in element){
                         if(i in anotherConstraints){
+                            anyType = true
                             local += ';\n'
                             local += setOthersProperty(element[i],i,null,null,checkLastElement(element,i))
                         } else if(i in constraints){
+                            anyType = true
                             local += ';\n'
                             local += setShInProperty(element[i],i,undefined,checkRequired(element,i),checkLastElement(element,i))
                         } 
                     }
+                    if(!anyType) {
+                        local += '.\n'
+                    }
+                    // else {
+                    //     local += ';\n'
+                    // }
                 }
             }
 
@@ -839,9 +844,9 @@ module.exports = {
         function setJS4GeoProperty(name,JS4GeoType,last=null,required){
             var local = ''
 
-            elementsCount['elements'] += 1
-            elementsCount['property'] += 1
-            elementsCount['properties'] += 1
+            addElementsCount('elements',1,name)
+            addElementsCount('property',1,name)
+            addElementsCount('properties',1,name)
 
             if(name != null){
                 if(JS4GeoType != null){
@@ -884,50 +889,54 @@ module.exports = {
             
             
             if(name == 'point'){
-                elementsCount['elements'] += 1
-                elementsCount['properties'] += 2
+                addElementsCount('elements',1,name)
+                addElementsCount('properties',2,name)
             } 
             else if(name == 'lineString'){
-                elementsCount['elements'] += 1
-                elementsCount['properties'] += 2
+                addElementsCount('elements',1,name)
+                addElementsCount('properties',2,name)
             } 
             else if(name == 'polygon'){
-                elementsCount['elements'] += 1
-                elementsCount['properties'] += 2
+                addElementsCount('elements',1,name)
+                addElementsCount('properties',2,name)
             } 
             else if(name == 'multiPoint'){
-                elementsCount['elements'] += 1
-                elementsCount['properties'] += 2
+                addElementsCount('elements',1,name)
+                addElementsCount('properties',2,name)
             } 
             else if(name == 'multiLineString'){
-                elementsCount['elements'] += 1
-                elementsCount['properties'] += 2
+                addElementsCount('elements',1,name)
+                addElementsCount('properties',2,name)
             } 
             else if(name == 'multiPolygon'){
-                elementsCount['elements'] += 1
-                elementsCount['properties'] += 2
+                addElementsCount('elements',1,name)
+                addElementsCount('properties',2,name)
             } 
             else if(name == 'feature'){
-                elementsCount['elements'] += 1
-                elementsCount['properties'] += 3
+                addElementsCount('elements',1,name)
+                addElementsCount('properties',3,name)
             } 
             else if(name == 'featureCollection'){
-                elementsCount['elements'] += 1
-                elementsCount['properties'] += 2
+                addElementsCount('elements',1,name)
+                addElementsCount('properties',2,name)
             } 
             else if(name == 'geometryCollection'){
-                elementsCount['elements'] += 1
-                elementsCount['properties'] += 2
+                addElementsCount('elements',1,name)
+                addElementsCount('properties',2,name)
             } 
             else if(name == 'directPosition'){
-                elementsCount['elements'] += 1
-                elementsCount['properties'] += 1
+                addElementsCount('elements',1,name)
+                addElementsCount('properties',1,name)
             }
 
 
         }
         
         //#region FUNCTIONS TO HELP
+
+        function addElementsCount(prefix,count,name) {
+            elementsCount[prefix] += count
+        }
 
         function isEmpty(obj) {
             for(var key in obj) {
@@ -962,6 +971,7 @@ module.exports = {
         
         function addSpaces(quant = 0){
             scope += quant
+            scope < 0 ? scope = 0 : null;
             return Array(scope*2).fill(' ').join('')
         }
         
@@ -1033,7 +1043,6 @@ module.exports = {
         }
 
         t1 = performance.now()
-
 
         return {shacl:shacl,log:log,elements:elementsUndefined,time:t1-t0,count:elementsCount}
     }
