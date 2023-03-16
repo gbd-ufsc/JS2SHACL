@@ -1,8 +1,8 @@
+import { __dirname, startServer } from "./server.js";
 import { writeFile as _writeFile, readFile, readdir } from "fs";
 
 import { performance } from "perf_hooks";
 import { start } from "./conversor.js";
-import { startServer } from "./server.js";
 
 var args = process.argv;
 var totalFilesAnalized = 0;
@@ -113,7 +113,7 @@ function readRepository() {
       return;
     }
 
-    lastFile = filenames[filenames.length - 1];
+    // lastFile = filenames[filenames.length - 1];
     totalFilesInRepository = filenames.length - 1;
 
     filenames.forEach((filename) => {

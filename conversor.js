@@ -125,6 +125,7 @@ export function start(schema) {
   var mappedDatatypes = [];
   var defSectionElements;
   var schemaSectionElements;
+  var typeItem;
 
   function getDefSectionElements(element) {
     if (element.definitions) {
@@ -745,13 +746,7 @@ export function start(schema) {
           } else if (element_.type == "array") {
             local += addSpaces() + "[\n";
 
-            local += setArray(
-              element_,
-              null,
-              false,
-              (last = null),
-              (specialCase = true)
-            );
+            local += setArray(element_, null, false, null, true);
 
             local += addSpaces(-1) + "]\n";
           } else if (element_.type == "object") {
@@ -1026,8 +1021,8 @@ export function start(schema) {
           element,
           name,
           checkRequired(element, name),
-          (last = true),
-          (specialCase = true)
+          true,
+          true
         );
       } else if (element.type in dataTypes) {
         local += ";\n";
