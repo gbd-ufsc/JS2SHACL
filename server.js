@@ -1,61 +1,62 @@
-module.exports = {
-  startServer: function () {
-    const express = require("express");
-    const handlebars = require("express-handlebars");
-    const path = require("path");
-    const bodyParser = require("body-parser");
-    const app = express();
-    const tools = require("./conversor");
+import bodyParser from "body-parser";
+import { check } from "./conversor.js";
+import express from "express";
+import { fileURLToPath } from "url";
+import handlebars from "express-handlebars";
+import path from "path";
 
-    // CONFIG
-    app.engine(
-      "handlebars",
-      handlebars.engine({
-        defaultLayout: "main",
-      })
-    );
-    app.set("view engine", "handlebars");
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
-    app.use(bodyParser.json({ limit: "50mb" }));
-    app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+const app = express();
 
-    app.use(express.static(path.join(__dirname, "public")));
+export function startServer() {
+  app.engine(
+    "handlebars",
+    handlebars.engine({
+      defaultLayout: "main",
+    })
+  );
+  app.set("view engine", "handlebars");
 
-    // ROTAS
-    app.get("/", (req, res) => {
-      res.render("./pages/index");
-    });
+  app.use(bodyParser.json({ limit: "50mb" }));
+  app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
-    app.post("/check", (req, res) => {
-      if (req.body.schema != "" && req.body.quantity != "") {
-        var result = tools.check(req.body.schema, req.body.quantity);
-        res.render("./pages/index", {
-          schema: req.body.schema,
-          shacl: result.shacl,
-          resultado: result.text,
-          log: result.log,
-          time: result.time,
-          runs: result.runs,
-        });
-      } else {
-        var result = "";
-        if (req.body.schema == "") {
-          result += "JSON Schema not provided! ";
-        }
-        if (req.body.quantity == "") {
-          result += "No specification of how many runs!";
-        }
-        res.render("./pages/index", {
-          schema: req.body.schema,
-          resultado: result,
-        });
+  app.use(express.static(path.join(__dirname, "public")));
+
+  app.get("/", (req, res) => {
+    res.render("./pages/index");
+  });
+
+  app.post("/check", (req, res) => {
+    if (req.body.schema != "" && req.body.quantity != "") {
+      var result = check(req.body.schema, req.body.quantity);
+      res.render("./pages/index", {
+        schema: req.body.schema,
+        shacl: result.shacl,
+        resultado: result.text,
+        log: result.log,
+        time: result.time,
+        runs: result.runs,
+      });
+    } else {
+      var result = "";
+      if (req.body.schema == "") {
+        result += "JSON Schema not provided! ";
       }
-    });
+      if (req.body.quantity == "") {
+        result += "No specification of how many runs!";
+      }
+      res.render("./pages/index", {
+        schema: req.body.schema,
+        resultado: result,
+      });
+    }
+  });
 
-    // PORT
-    const PORT = process.env.PORT || 8080;
-    app.listen(PORT, () => {
-      console.log(`Server running in localhost:${PORT}`);
-    });
-  },
-};
+  // PORT
+  const PORT = process.env.PORT || 8080;
+  app.listen(PORT, () => {
+    console.log(`Server running in http://localhost:${PORT}`);
+  });
+}

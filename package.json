@@ -1,5 +1,6 @@
 {
   "name": "js2shacl",
+  "type": "module",
   "version": "1.0.0",
   "description": "JS2Shacl is a document conversor, makes conversions from JSON Schema to SHACL Schema (Turtle format).",
   "main": "JS4GeoDefs.js",
