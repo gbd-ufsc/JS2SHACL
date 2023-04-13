@@ -37,13 +37,10 @@ p {
     width: 50%;
 }
 .bgBody{
-    background-color: #24292e;
+    background-color: #F6F8FA;
   }
 .bgNavbar{
-    background-color: #2c313a;
-}
-div {
-    color: white;
+    background-color: #FFFFFF;
 }
 #test{
     background-color: red;
@@ -61,7 +58,7 @@ div {
     border-collapse: collapse;
     width: 100%;
  }
-  
+
 .boxer .box-row {
     display: table-row;
 }
@@ -74,12 +71,14 @@ div {
 }
 .Area {
     width: 100%;
+    color: #000;
+    border: solid 1px #f7f7f7;
 }
 .customFooter{
-    color: blue;
     text-align: center;
     line-height: 30px;
     height: 30px;
+    background-color: #fff;
 }
 
 .download{
