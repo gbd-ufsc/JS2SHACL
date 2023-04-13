@@ -1,0 +1,25 @@
+{
+  "name": "js2shacl",
+  "type": "module",
+  "version": "1.0.0",
+  "description": "JS2Shacl is a document conversor, makes conversions from JSON Schema to SHACL Schema (Turtle format).",
+  "main": "JS4GeoDefs.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node app.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ThiagoCComelli/JS2SHACL.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ThiagoCComelli/JS2SHACL/issues"
+  },
+  "homepage": "https://github.com/ThiagoCComelli/JS2SHACL#readme",
+  "dependencies": {
+    "express": "^4.18.2",
+    "express-handlebars": "^7.0.2"
+  }
+}
